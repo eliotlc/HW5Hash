@@ -1,3 +1,7 @@
+# Eliot Cole
+# COS 226
+# November 22, 2025
+
 try:
     import masterous.base as m
 except ImportError:
@@ -11,13 +15,13 @@ class DataItem:
         self.movie_name, self.genre, self.release_date, self.director, self.revenue, self.rating, self.min_duration, self.production_company, self.quote = line
 
 def hashFunction(stringData) -> int:
-   key = sum(ord(char) for char in stringData)
-   return key
+    random.seed(stringData)
+    return random.randint(0,10000)
 
 import csv
 
 # create empty hash tables
-size = 10000 
+size = 15000 
 hashTitleTable = [None] * size
 hashQuoteTable = [None] * size
 
@@ -43,10 +47,14 @@ for row in rows:
     
     if hashTitleTable[titleKey] is None:
         wasted_space_title -= 1
-        hashTitleTable[titleKey] = [dataItem]
+        hashTitleTable[titleKey] = dataItem
     else:
         collision_count_title += 1
-        hashTitleTable[titleKey].append(dataItem)
+        for i in range(titleKey + 1, titleKey + 1 + size):
+            if hashTitleTable[i % size] is None:
+                wasted_space_title -= 1
+                hashTitleTable[i % size] = dataItem
+                break
 construction_time_title = time() - start
 
 start = time()
@@ -57,13 +65,17 @@ for row in rows:
     
     if hashQuoteTable[quoteKey] is None:
         wasted_space_quote -= 1
-        hashQuoteTable[quoteKey] = [dataItem]
+        hashQuoteTable[quoteKey] = dataItem
     else:
         collision_count_quote += 1
-        hashQuoteTable[quoteKey].append(dataItem)
+        for i in range(quoteKey + 1, quoteKey + 1 + size):
+            if hashQuoteTable[i % size] is None:
+                wasted_space_quote -= 1
+                hashQuoteTable[i % size] = dataItem
+                break
 construction_time_quote = time() - start
 
-print("\nStatistics for summed ascii values\n")
+print("\nStatistics for random seed hash function with linear probing\n")
 print(f"Total collisions in Title Hash Table: {collision_count_title}")
 print(f"Total wasted space in Title Hash Table: {wasted_space_title}")
 print(f"Title Hash Table construction time: {construction_time_title:0.3f} seconds")
