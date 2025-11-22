@@ -11,9 +11,7 @@ class DataItem:
         self.movie_name, self.genre, self.release_date, self.director, self.revenue, self.rating, self.min_duration, self.production_company, self.quote = line
 
 def hashFunction(stringData) -> int:
-    random.seed(stringData)
-    key = random.randint(0, 10000)
-    return key
+   return hash(stringData)
 
 import csv
 
@@ -64,7 +62,7 @@ for row in rows:
         hashQuoteTable[quoteKey].append(dataItem)
 construction_time_quote = time() - start
 
-print("\nStatistics for Hash Tables (Method 1)\n")
+print("\nStatistics for built-in hash function\n")
 print(f"Total collisions in Title Hash Table: {collision_count_title}")
 print(f"Total wasted space in Title Hash Table: {wasted_space_title}")
 print(f"Title Hash Table construction time: {construction_time_title:0.3f} seconds")
